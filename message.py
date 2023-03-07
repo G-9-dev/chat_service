@@ -1,24 +1,16 @@
-import websocket
+import requests
 import json
 
-# Set up the WebSocket connection
-print("Connecting to server...")
-ws = websocket.create_connection("ws://localhost:8000/")
-print("Connected to server.")
+# Set the chat server URL
+url = 'http://localhost:57988/'
 
 # Log in to the chat server
 login_message = {'type': 'login'}
-ws.send(json.dumps(login_message))
+response = requests.post(url, json=login_message)
+print(response.text)
 
-# Send and receive messages to/from the chat server
-while True:
-    # Wait for user input
-    message_text = input("Enter message: ")
-
-    # Send a message to the chat server
-    message = {'type': 'message', 'text': message_text}
-    ws.send(json.dumps(message))
-
-    # Receive messages from the chat server
-    message = ws.recv()
-    print(message)
+# Send a message to the chat server
+message_text = input("Enter message: ")
+message = {'type': 'message', 'text': message_text}
+response = requests.post(url, json=message)
+print(response.text)
